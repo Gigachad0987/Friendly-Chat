@@ -1,0 +1,17 @@
+{%extends "base.html"%}
+{%block Chats%}
+<h1>Chats</h1>
+{%if Chats%}
+{%for chat in Chats%}
+<a href="{%url 'ChatInfo' chat.pk%}">
+    {%if chat.user_2 == user%}
+    {{chat.user_1.username}}
+    {%else%}
+    {{chat.user_2.username}}
+    {%endif%}
+</a>
+{%endfor%}
+{%else%}
+<p>Empty</p>
+{%endif%}
+{%endblock%}
