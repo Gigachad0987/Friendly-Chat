@@ -1,0 +1,25 @@
+.messages{
+    height: 65vh;
+    border: 1px solid black;
+    padding: 15px;
+    background: rgb(173, 144, 255);
+    overflow-y: auto;
+
+}
+.chat-container{
+    display: flex;
+    
+}
+.sidebar{
+    width: 30%;
+    border-right: 2px solid black;
+    overflow-y: auto;
+    padding: 15px;
+    background: rgb(0, 226, 68);
+}
+.mainchat{
+    width: 70%;
+    padding: 20px;
+    background: rgb(24, 20, 255);
+
+}

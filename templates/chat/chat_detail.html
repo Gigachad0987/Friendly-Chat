@@ -1,5 +1,40 @@
 {%extends "base.html"%}
+{%block Chats%}
+<h1>Chats</h1>
+{%if chats%}
+{%for chat in chats%}
+<a href="{%url 'ChatInfo' chat.pk%}">
+    {%if chat.user_2 == user%}
+    {{chat.user_1.username}}
+    {%else%}
+    {{chat.user_2.username}}
+    {%endif%}
+</a>
+{%endfor%}
+{%else%}
+<p>Empty</p>
+{%endif%}
+{%endblock%}
 {%block ChatInfo%}
-{{Chat_Info.user_1}}
-{{Chat_Info.user_2}}
+<h1>
+    {%if Chat_Info.user_1 == user%}
+    {{Chat_Info.user_2.username}}
+    {%else%}
+    {{Chat_Info.user_1.username}}
+    {%endif%}
+</h1>
+<div class="messages">
+    {%for message in Chat_Info.Messages.all%}
+    <div class="message {%if message.sender == user%} my {%else%} other {%endif%}">
+        <strong>{{message.sender.username}}</strong>: {{message.text}}<br><small>{{message.created_time|date:"H:i"}}</small>
+    </div>
+    {%empty%}
+    <p>No messages yet</p>
+    {%endfor%}
+</div>
+<form method="post" action="{%url 'MessageCreate' Chat_Info.pk%}">
+    {%csrf_token%}
+    <textarea name="text" placeholder="Enter massage" required rows="3"></textarea>
+    <button type="submmit">Send</button>
+</form>
 {%endblock%}
