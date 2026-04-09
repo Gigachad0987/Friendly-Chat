@@ -8,6 +8,9 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Chat, Message
 from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.contrib.auth import login
 
 class ChatListView(LoginRequiredMixin, ListView):
     model = Chat
@@ -36,4 +39,13 @@ class CreateMessageView(LoginRequiredMixin, CreateView):
         pk = self.kwargs["pk"]
         chat = Chat.objects.get(pk=pk)
         form.instance.chat=chat
+        return super().form_valid(form)
+    
+class UserRegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('ChatList')
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        user = form.save()
+        login(self.request, user)
         return super().form_valid(form)
