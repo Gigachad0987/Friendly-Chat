@@ -17,8 +17,14 @@ class ChatListView(LoginRequiredMixin, ListView):
     template_name = "chat/chat_list.html"
     context_object_name = "Chats"
     def get_queryset(self):
+        chat_name = self.request.GET.get('chat_name')
+        if chat_name:
+            chat_name = chat_name.strip()
+            chats = Chat.objects.filter(Q(user_1=self.request.user, user_2__username__icontains=chat_name ) | Q(user_2=self.request.user, user_1__username__icontains=chat_name))
+            return chats
         chats = Chat.objects.filter(Q(user_1=self.request.user) | Q(user_2=self.request.user))
         return chats
+    
     
 class ChatDetailView(LoginRequiredMixin, DetailView):
     model = Chat
@@ -26,7 +32,13 @@ class ChatDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "Chat_Info"
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["chats"] = Chat.objects.filter(Q(user_1=self.request.user) | Q(user_2=self.request.user))
+        chat_name = self.request.GET.get('chat_name')
+        if chat_name:
+            chat_name = chat_name.strip()
+            chats = Chat.objects.filter(Q(user_1=self.request.user, user_2__username__icontains=chat_name ) | Q(user_2=self.request.user, user_1__username__icontains=chat_name))
+        else:
+            chats = Chat.objects.filter(Q(user_1=self.request.user) | Q(user_2=self.request.user))
+        context["chats"] = chats
         return context
     
 class CreateMessageView(LoginRequiredMixin, CreateView):
