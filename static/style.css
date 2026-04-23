@@ -1,25 +1,201 @@
-.messages{
-    height: 65vh;
-    border: 1px solid black;
-    padding: 15px;
-    background: rgb(235, 158, 36);
-    overflow-y: auto;
+/* ФОН */
+body {
+    background: #0B0F14;
+}
 
-}
-.chat-container{
-    display: flex;
-    
-}
+/* SIDEBAR */
 .sidebar{
     width: 30%;
-    border-right: 2px solid black;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    border-radius: 30px;
     overflow-y: auto;
     padding: 15px;
-    background: rgb(0, 226, 68);
+    background: #12161C;
 }
+
+/* CHAT AREA */
 .mainchat{
+    border-radius: 30px;
     width: 70%;
     padding: 20px;
-    background: rgb(24, 20, 255);
+    background: #14181F;
+}
 
+/* MESSAGES BOX */
+.messages{
+    height: 65vh;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 15px;
+    background: #0F141A;
+    overflow-y: auto;
+}
+
+/* TEXTAREA */
+textarea{
+    resize: none;
+    min-height: 44px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+    background: #1A1F27;
+    color: #E6EAF2;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    outline: none;
+    transition: 0.2s;
+}
+
+textarea:focus {
+    border-color: #6C5CE7;
+    box-shadow: 0 0 10px rgba(108,92,231,0.5);
+}
+
+/* MESSAGES STYLE */
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+}
+
+/* MESSAGE BASE */
+.message {
+    max-width: 65%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    color: white;
+}
+
+/* ТВОЇ */
+.message.my {
+    background: linear-gradient(135deg, #6C5CE7, #7F7CFF);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 0 10px rgba(108,92,231,0.4);
+}
+
+/* ЧУЖІ */
+.message.other {
+    background: #1F2630;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+/* TIME */
+.message small {
+    display: block;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 4px;
+    text-align: right;
+}
+
+/* 🔥 КНОПКИ (ГОЛОВНЕ) */
+button {
+    background: linear-gradient(135deg, #6C5CE7, #7F7CFF);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 0 15px rgba(108,92,231,0.5);
+}
+
+/* hover */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(108,92,231,0.8);
+}
+
+/* active click */
+button:active {
+    transform: scale(0.97);
+}
+
+.sidebar {
+    flex: 3;
+}
+
+.mainchat {
+    flex: 7;
+}
+
+.chat-container {
+    display: flex;
+    gap: 15px; /* щоб був відступ між блоками */
+}
+
+.chat-item {
+    display: block;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #E6EAF2;
+    background: #14181F;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: 0.2s;
+    font-weight: 500;
+}
+
+/* hover ефект */
+.chat-item:hover {
+    background: rgba(108, 92, 231, 0.15);
+    border-color: rgba(108, 92, 231, 0.4);
+    transform: translateX(3px);
+}
+
+/* активний клік */
+.chat-item:active {
+    transform: scale(0.98);
+}
+
+/* username стиль (щоб було красивіше) */
+.chat-item span {
+    opacity: 0.7;
+    font-size: 13px;
+}
+
+.sidebar h1 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #E6EAF2;
+}
+
+.sidebar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #0F141A;
+    color: white;
+    margin-bottom: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(108, 92, 231, 0.4);
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+/* hover ефект */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(108, 92, 231, 0.8);
 }

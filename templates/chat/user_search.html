@@ -1,0 +1,35 @@
+{%extends "base.html"%}
+{%block Chats%}
+<form method="post" action="{%url 'logout'%}">
+    {%csrf_token%}
+    <button type="submmit">Log out</button></form>
+<h1>Chats</h1>
+<form method="get">
+    <input type="text" name="chat_name" placeholder="Search" value="{{request.GET.chat_name|default:''}}">
+    <button type="submit">Search</button>
+</form>
+{%if chats%}
+{%for chat in chats%}
+<p><a href="{%url 'ChatInfo' chat.pk%}">
+    {%if chat.user_2 == user%}
+    {{chat.user_1.username}}
+    {%else%}
+    {{chat.user_2.username}}
+    {%endif%}
+</a></p>
+{%endfor%}
+{%else%}
+<p>Empty</p>
+{%endif%}
+<hr>
+<h3>New chat</h3>
+<a href="{%url 'UserSearch'%}">Find users</a>
+{%endblock%}
+{%block ChatInfo%}
+<h1>Search for users</h1>
+<form methid="get">
+    <input type="text" name="UserName" placeholder="Enter username..." value="{{request.GET.UserName|default:''}}">
+    <button type="submit">Search</button>
+</form>
+
+{%endblock%}

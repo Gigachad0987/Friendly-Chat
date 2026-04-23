@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,6 +11,10 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
+from django.contrib import messages
+from django.contrib.auth.models import User
+
+
 
 class ChatListView(LoginRequiredMixin, ListView):
     model = Chat
@@ -46,6 +50,10 @@ class CreateMessageView(LoginRequiredMixin, CreateView):
     fields = ["text"]
     def get_success_url(self) -> str:
         return reverse("ChatInfo", kwargs={"pk":self.kwargs["pk"]})
+    def form_invalid(self, form: BaseModelForm) -> HttpResponse:
+        messages.error(self.request, "The message can't be empty")
+        pk = self.kwargs["pk"]
+        return redirect("ChatInfo", pk=pk)
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.sender=self.request.user
         pk = self.kwargs["pk"]
@@ -61,3 +69,12 @@ class UserRegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
+    
+class UserSearchView(ListView):
+    model = User
+    template_name = "chat/user_search.html"
+    context_object_name = "Users"
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["chats"] = Chat.objects.filter(Q(user_1=self.request.user) | Q(user_2=self.request.user))
+        return context

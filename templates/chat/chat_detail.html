@@ -23,14 +23,14 @@
 {%endif%}
 <hr>
 <h3>New chat</h3>
-<a href="#">Find users</a>
+<a href="{%url 'UserSearch'%}">Find users</a>
 {%endblock%}
 {%block ChatInfo%}
 <h1>
     {%if Chat_Info.user_1 == user%}
-    {{Chat_Info.user_2.username}}
+    <span>{{chat.user_2.username}}</span>
     {%else%}
-    {{Chat_Info.user_1.username}}
+    <span>{{chat.user_1.username}}</span>
     {%endif%}
 </h1>
 <div class="messages">
@@ -42,9 +42,49 @@
     <p>No messages yet</p>
     {%endfor%}
 </div>
+<div class="container">
+{%if messages%}
+{%for message in messages%}
+<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+</div>
+{%endfor%}
+{%endif%}
 <form method="post" action="{%url 'MessageCreate' Chat_Info.pk%}">
     {%csrf_token%}
     <textarea name="text" placeholder="Enter massage" required rows="3"></textarea>
-    <button type="submmit">Send</button>
+    <button type="submit">Send</button>
 </form>
+
+<script>
+    document.querySelectorAll("textarea").forEach(el => {
+        el.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                this.form.submit();
+            }
+        });
+    });
+    </script>
+<script>
+    window.onload = function() {
+        const textarea = document.querySelector("textarea");
+        const messages = document.querySelector(".messages");
+    
+        // 1. Скрол вниз
+        if (messages) {
+            messages.scrollTop = messages.scrollHeight;
+        }
+    
+        // 2. Фокус на textarea
+        if (textarea) {
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        }
+    };
+    </script>
+
+
 {%endblock%}
