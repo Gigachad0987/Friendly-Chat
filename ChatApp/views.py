@@ -4,7 +4,7 @@ from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Chat, Message
 from django.db.models import Q
@@ -78,3 +78,29 @@ class UserSearchView(ListView):
         context = super().get_context_data(**kwargs)
         context["chats"] = Chat.objects.filter(Q(user_1=self.request.user) | Q(user_2=self.request.user))
         return context
+    def get_queryset(self) -> QuerySet[Any]:
+        user_name = self.request.GET.get("UserName", "").strip()
+        users = User.objects.exclude(pk = self.request.user.pk)
+        if user_name:
+            users = users.filter(username__contains= user_name)
+        else:
+            users = users.none()
+        return users
+    
+class CreateChatView(View):
+    def get(self, request, pk):
+        other_user = User.objects.get(pk=pk)
+        if request.user.id < other_user.id:
+            user_1, user_2 = request.user, other_user
+        else:
+            user_1, user_2 = other_user, request.user
+            
+        new_chat, _ = Chat.objects.get_or_create(user_1 = user_1, user_2 = user_2)
+        return redirect("ChatInfo", pk=new_chat.pk)
+    
+class DeleteChatView(View):
+    def post(self, request, pk):
+        chat = Chat.objects.get(pk=pk)
+        chat.delete()
+        return redirect("ChatList")
+        

@@ -28,11 +28,15 @@
 {%block ChatInfo%}
 <h1>
     {%if Chat_Info.user_1 == user%}
-    <span>{{chat.user_2.username}}</span>
+    <span>{{Chat_Info.user_2.username}}</span>
     {%else%}
-    <span>{{chat.user_1.username}}</span>
+    <span>{{Chat_Info.user_1.username}}</span>
     {%endif%}
 </h1>
+<form method="post" action="{%url 'DeleteChat' Chat_Info.pk%}">
+    {%csrf_token%}
+    <button type="submit">Delete</button>
+</form>
 <div class="messages">
     {%for message in Chat_Info.Messages.all%}
     <div class="message {%if message.sender == user%} my {%else%} other {%endif%}">

@@ -7,4 +7,6 @@ urlpatterns=[
     path("chat/<int:pk>/message", views.CreateMessageView.as_view(), name="MessageCreate"),
     path("register/", views.UserRegisterView.as_view(), name='Register'),
     path("user_search/", views.UserSearchView.as_view(), name='UserSearch'),
+    path("create_chat/<int:pk>", views.CreateChatView.as_view(), name='CreateChat'),
+    path("delete_chat/<int:pk>", views.DeleteChatView.as_view(), name='DeleteChat'),
 ]

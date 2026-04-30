@@ -27,9 +27,14 @@
 {%endblock%}
 {%block ChatInfo%}
 <h1>Search for users</h1>
-<form methid="get">
+<form method="get">
     <input type="text" name="UserName" placeholder="Enter username..." value="{{request.GET.UserName|default:''}}">
     <button type="submit">Search</button>
 </form>
+{% if Users%}
+{%for user in Users%}
+<p>{{user.username}} <a href="{%url 'CreateChat' user.pk%}">Send a message</a></p>
+{%endfor%}
+{%endif%}
 
 {%endblock%}
