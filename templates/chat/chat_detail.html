@@ -1,29 +1,46 @@
 {%extends "base.html"%}
 {%block Chats%}
-<form method="post" action="{%url 'logout'%}">
+
+<div class="sidebar-header">
+  <h1>Chats</h1>
+  <form method="post" action="{%url 'logout'%}">
     {%csrf_token%}
-    <button type="submmit">Log out</button></form>
-<h1>Chats</h1>
-<form method="get">
+    <button type="submit">Log out</button>
+  </form>
+</div>
+
+<div class="sb-search">
+  <form method="get">
     <input type="text" name="chat_name" placeholder="Search" value="{{request.GET.chat_name|default:''}}">
     <button type="submit">Search</button>
-</form>
-{%if chats%}
-{%for chat in chats%}
-<p><a href="{%url 'ChatInfo' chat.pk%}">
-    {%if chat.user_2 == user%}
-    {{chat.user_1.username}}
-    {%else%}
-    {{chat.user_2.username}}
-    {%endif%}
-</a></p>
-{%endfor%}
-{%else%}
-<p>Empty</p>
-{%endif%}
+  </form>
+</div>
+
+<div class="chat-list">
+  {%if chats%}
+    {%for chat in chats%}
+    <a class="chat-item"
+       href="{%url 'ChatInfo' chat.pk%}"
+       data-initials="{%if chat.user_2 == user%}{{chat.user_1.username|slice:':1'}}{%else%}{{chat.user_2.username|slice:':1'}}{%endif%}">
+      {%if chat.user_2 == user%}
+        {{chat.user_1.username}}
+      {%else%}
+        {{chat.user_2.username}}
+      {%endif%}
+    </a>
+    {%endfor%}
+  {%else%}
+    <p style="color:#7a8fa6; padding: 20px; text-align:center;">Empty</p>
+  {%endif%}
+</div>
+
 <hr>
-<h3>New chat</h3>
-<a href="{%url 'UserSearch'%}">Find users</a>
+
+<div class="new-chat">
+  <div class="new-chat-label">New chat</div>
+  <a href="{%url 'UserSearch'%}">Find users</a>
+</div>
+
 {%endblock%}
 {%block ChatInfo%}
 <h1>
@@ -77,18 +94,15 @@
         const textarea = document.querySelector("textarea");
         const messages = document.querySelector(".messages");
     
-        // 1. Скрол вниз
         if (messages) {
             messages.scrollTop = messages.scrollHeight;
         }
     
-        // 2. Фокус на textarea
         if (textarea) {
             textarea.focus();
             textarea.setSelectionRange(textarea.value.length, textarea.value.length);
         }
     };
     </script>
-
 
 {%endblock%}
